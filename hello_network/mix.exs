@@ -1,7 +1,7 @@
 defmodule HelloNetwork.Mixfile do
   use Mix.Project
 
-  @target System.get_env("NERVES_TARGET") || "rpi2"
+  @target System.get_env("NERVES_TARGET") || "rpi"
 
   def project do
     [app: :hello_network,
@@ -22,14 +22,16 @@ defmodule HelloNetwork.Mixfile do
      applications: [:logger,
                     :nerves_networking,
                     :nerves_ssdp_server,
-                    :nerves_lib]]
+                    :nerves_lib,
+                    :mdns]]
   end
 
   defp deps do
     [{:nerves, "~> 0.3.0"},
      {:nerves_lib, github: "nerves-project/nerves_lib"},
      {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"},
-     {:nerves_ssdp_server, github: "nerves-project/nerves_ssdp_server"}]
+     {:nerves_ssdp_server, github: "nerves-project/nerves_ssdp_server"},
+     {:mdns, github: "NationalAssociationOfRealtors/mdns"}]
   end
 
   def system(target) do

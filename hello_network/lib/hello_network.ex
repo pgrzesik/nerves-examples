@@ -1,5 +1,7 @@
 defmodule HelloNetwork do
 
+  require Logger
+
   alias Nerves.Networking
   alias Nerves.SSDPServer
   alias Nerves.Lib.UUID
