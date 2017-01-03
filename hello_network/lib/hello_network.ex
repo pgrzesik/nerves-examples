@@ -67,7 +67,7 @@ defmodule HelloNetwork do
     })
     Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "rpi._http._tcp.local",
-      data: "txtvers=1",
+      data: ["txtvers=1"],
       ttl: 10,
       type: :txt
     })
