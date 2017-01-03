@@ -65,12 +65,13 @@ defmodule HelloNetwork do
       ttl: 10,
       type: :srv
     })
-    #Mdns.Server.add_service(%Mdns.Server.Service{
-    #  domain: "rpi1._http._tcp.local",
-    #  data: ["txtvers=1"],
-    #  ttl: 10,
-    #  type: :txt
-    #})
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "rpi1._http._tcp.local",
+      #data: ["txtvers=1"],
+      data: [],
+      ttl: 10,
+      type: :txt
+    })
 
     Logger.debug "[4] done"
     :ok
