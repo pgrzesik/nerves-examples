@@ -35,12 +35,41 @@ defmodule HelloNetwork do
     Logger.debug "[3] eth0 ip4"
     Mdns.Server.start
 
+    # Make `ping rpi.local` from a laptop work.
     Mdns.Server.set_ip(eth0ip4)
     Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "rpi.local",
       data: :ip,
       ttl: 10,
       type: :a
+    })
+
+    # Make `dns-sd -B _services._dns-sd._udp` show
+    # an HTTP service.
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "_services._dns-sd._udp.local",
+      data: "_http._tcp.local",
+      ttl: 10,
+      type: :ptr
+    })
+
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "_http._tcp.local",
+      data: "rpi._http._tcp.local",
+      ttl: 10,
+      type: :ptr
+    })
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "rpi",
+      data: "0 0 4000 rpi.local",
+      ttl: 10,
+      type: :srv
+    })
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "rpi",
+      data: "txtvers=1",
+      ttl: 10,
+      type: :txt
     })
 
     Logger.debug "[4] done"
