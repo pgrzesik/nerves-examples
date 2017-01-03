@@ -23,7 +23,8 @@ defmodule HelloNetwork.Mixfile do
                     :nerves_networking,
                     :nerves_ssdp_server,
                     :nerves_lib,
-                    :mdns]]
+                    :mdns,
+                    :runtime_tools]]
   end
 
   defp deps do
