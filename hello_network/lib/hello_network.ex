@@ -13,6 +13,7 @@ defmodule HelloNetwork do
       {:ok, _} = Networking.setup @interface
     end
     #publish_node_via_ssdp(@interface)
+    #publish_node_via_mdns(@interface)
     {:ok, self}
   end
 
@@ -23,6 +24,27 @@ defmodule HelloNetwork do
     st = "urn:nerves-project-org:service:cell:1"
     #fields = ["x-node": (node |> to_string) ]
     {:ok, _} = SSDPServer.publish usn, st
+  end
+
+  def publish_node_via_mdns(iface) do
+    Logger.debug "[1] iface: #{IO.inspect iface}"
+    {:ok, ifaces} = :inet.getifaddrs
+    {'eth0', eth0} = List.keyfind(ifaces, 'eth0', 0)
+    Logger.debug "[2] eth0"
+    eth0ip4 = eth0[:addr]
+    Logger.debug "[3] eth0 ip4"
+    Mdns.Server.start
+
+    Mdns.Server.set_ip(eth0ip4)
+    Mdns.Server.add_service(%Mdns.Server.Service{
+      domain: "rpi.local",
+      data: :ip,
+      ttl: 10,
+      type: :a
+    })
+
+    Logger.debug "[4] done"
+    :ok
   end
 
   @doc "Attempts to perform a DNS lookup to test connectivity."
