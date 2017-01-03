@@ -47,20 +47,20 @@ defmodule HelloNetwork do
     # Make `dns-sd -B _services._dns-sd._udp` show
     # an HTTP service.
     Mdns.Server.add_service(%Mdns.Server.Service{
-      domain: "_services._dns-sd._udp.local",
-      data: "_http._tcp.local",
+      domain: "_services._dns-sd._udp",
+      data: "_http._tcp",
       ttl: 10,
       type: :ptr
     })
 
     Mdns.Server.add_service(%Mdns.Server.Service{
-      domain: "_http._tcp.local",
-      data: "rpi._http._tcp.local",
+      domain: "_http._tcp",
+      data: "rpi._http._tcp",
       ttl: 10,
       type: :ptr
     })
     Mdns.Server.add_service(%Mdns.Server.Service{
-      domain: "_http._tcp.local",
+      domain: "_http._tcp",
       data: "0 0 4000 rpi.local",
       ttl: 10,
       type: :srv
