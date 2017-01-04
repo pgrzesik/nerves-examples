@@ -3,14 +3,14 @@ defmodule HelloNetwork do
   require Logger
 
   alias Nerves.Networking
-  alias Nerves.SSDPServer
-  alias Nerves.Lib.UUID
 
   def start(_type, _args) do
     unless :os.type == {:unix, :darwin} do     # don't start networking unless we're on nerves
+      hostname = who_am_i?()
+      :net_kernel.stop
+      :net_kernel.start([:erlang.binary_to_atom(hostname, :utf8)])
       {:ok, _} = Networking.setup @interface
-      me = who_am_i?()
-      publish_node_via_mdns(me)
+      publish_node_via_mdns(hostname)
     end
     {:ok, self}
   end
