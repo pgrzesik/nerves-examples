@@ -59,17 +59,22 @@ defmodule HelloNetwork do
       ttl: 10,
       type: :ptr
     })
+
+    # This should be the DNS-SD way of defining a service instance:
+    # its priority, weight and host.
+    # It doesn't work.
+    # The packet sent by Mdns is corrupt as seen by Wireshark
+    # and undecodable by Erlang :inet_dns.decode/1.
+    #Mdns.Server.add_service(%Mdns.Server.Service{
+    #  domain: "rpi1._http._tcp.local",
+    #  data: "0 0 4000 rpi1.local",
+    #  ttl: 10,
+    #  type: :srv
+    #})
+
     Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "rpi1._http._tcp.local",
-      data: "0 0 4000 rpi1.local",
-      ttl: 10,
-      type: :srv
-    })
-    Mdns.Server.add_service(%Mdns.Server.Service{
-      domain: "rpi1._http._tcp.local",
-      #data: ["txtvers=1"],
-      #data: [],
-      data: ["id=123123", "port=4000"],
+      data: ["txtvers=1", "port=4000"],
       ttl: 10,
       type: :txt
     })
