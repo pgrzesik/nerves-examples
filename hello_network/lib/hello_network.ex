@@ -6,28 +6,22 @@ defmodule HelloNetwork do
   alias Nerves.SSDPServer
   alias Nerves.Lib.UUID
 
-  @interface :eth0
-
   def start(_type, _args) do
     unless :os.type == {:unix, :darwin} do     # don't start networking unless we're on nerves
       {:ok, _} = Networking.setup @interface
+      me = who_am_i?()
+      publish_node_via_mdns(me)
     end
-    #publish_node_via_ssdp(@interface)
-    #publish_node_via_mdns(@interface)
     {:ok, self}
   end
 
-  # define SSDP service type that allows discovery from the cell tool,
-  # so a node running this example can be found with `cell list`
-  defp publish_node_via_ssdp(_iface) do
-    usn = "uuid:" <> UUID.generate
-    st = "urn:nerves-project-org:service:cell:1"
-    #fields = ["x-node": (node |> to_string) ]
-    {:ok, _} = SSDPServer.publish usn, st
+  def who_am_i?() do
+    {:ok, hostname} = :inet.gethostname()
+    List.to_string hostname
   end
 
-  def publish_node_via_mdns(iface) do
-    Logger.debug "[1] iface: #{IO.inspect iface}"
+  def publish_node_via_mdns(hostname) do
+    Logger.debug "[1] hostname: #{hostname}"
     {:ok, ifaces} = :inet.getifaddrs
     {'eth0', eth0} = List.keyfind(ifaces, 'eth0', 0)
     Logger.debug "[2] eth0"
@@ -38,7 +32,7 @@ defmodule HelloNetwork do
     # Make `ping rpi1.local` from a laptop work.
     Mdns.Server.set_ip(eth0ip4)
     Mdns.Server.add_service(%Mdns.Server.Service{
-      domain: "rpi1.local",
+      domain: "#{hostname}.local",
       data: :ip,
       ttl: 10,
       type: :a
@@ -55,7 +49,7 @@ defmodule HelloNetwork do
 
     Mdns.Server.add_service(%Mdns.Server.Service{
       domain: "_http._tcp.local",
-      data: "rpi1._http._tcp.local",
+      data: "#{hostname}._http._tcp.local",
       ttl: 10,
       type: :ptr
     })
@@ -66,14 +60,14 @@ defmodule HelloNetwork do
     # The packet sent by Mdns is corrupt as seen by Wireshark
     # and undecodable by Erlang :inet_dns.decode/1.
     #Mdns.Server.add_service(%Mdns.Server.Service{
-    #  domain: "rpi1._http._tcp.local",
-    #  data: "0 0 4000 rpi1.local",
+    #  domain: "#{hostname}._http._tcp.local",
+    #  data: "0 0 4000 #{hostname}.local",
     #  ttl: 10,
     #  type: :srv
     #})
 
     Mdns.Server.add_service(%Mdns.Server.Service{
-      domain: "rpi1._http._tcp.local",
+      domain: "#{hostname}._http._tcp.local",
       data: ["txtvers=1", "port=4000"],
       ttl: 10,
       type: :txt
