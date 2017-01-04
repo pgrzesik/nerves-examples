@@ -7,7 +7,7 @@ defmodule HelloNetwork.Mixfile do
     [app: :hello_network,
      version: "0.1.0",
      elixir: "~> 1.3",
-     archives: [nerves_bootstrap: "~> 0.1.3"],
+     archives: [nerves_bootstrap: "~> 0.2.1"],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      target: @target,
@@ -24,6 +24,7 @@ defmodule HelloNetwork.Mixfile do
                     :nerves_ssdp_server,
                     :nerves_lib,
                     :mdns,
+                    :dnssd,
                     :runtime_tools]]
   end
 
@@ -32,7 +33,8 @@ defmodule HelloNetwork.Mixfile do
      {:nerves_lib, github: "nerves-project/nerves_lib"},
      {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"},
      {:nerves_ssdp_server, github: "nerves-project/nerves_ssdp_server"},
-     {:mdns, github: "NationalAssociationOfRealtors/mdns"}]
+     {:mdns, github: "NationalAssociationOfRealtors/mdns"},
+     {:dnssd, github: "benoitc/dnssd_erlang"}]
   end
 
   def system(target) do
