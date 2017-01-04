@@ -32,7 +32,7 @@ defmodule HelloNetwork.Mixfile do
      {:nerves_lib, github: "nerves-project/nerves_lib"},
      {:nerves_networking, github: "nerves-project/nerves_networking", tag: "v0.6.0"},
      {:nerves_ssdp_server, github: "nerves-project/nerves_ssdp_server"},
-     {:mdns, github: "NationalAssociationOfRealtors/mdns"}]
+     {:mdns, github: "erszcz/mdns"}]
   end
 
   def system(target) do
