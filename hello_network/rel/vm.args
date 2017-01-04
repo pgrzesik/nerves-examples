@@ -1,6 +1,6 @@
 ## Start the Elixir shell
 -noshell
--name nerves
+-sname nerves
 -setcookie rpi
 -user Elixir.IEx.CLI
 -extra --no-halt
