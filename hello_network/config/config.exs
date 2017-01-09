@@ -10,7 +10,7 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-config :hello_network, hostname: "rpi12345"
+config :hello_network, hostname: "rpi12"
 #
 # And access this configuration in your application as:
 #
